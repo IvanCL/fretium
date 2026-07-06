@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+/build/
+/app/build/
+/app/schemas/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration file (contains SDK path)
+local.properties
+
+# Log/OS files
+*.log
+.DS_Store
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystores
+*.jks
+*.keystore
+!debug.keystore
+
+# Google services (if added later)
+google-services.json
+
+# Instrumented/unit test reports
+/app/build/reports/
+/app/build/test-results/

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Fretboard strings -->
+    <path android:fillColor="#8b5cf6" android:pathData="M34,24 L34,84 L38,84 L38,24 Z" />
+    <path android:fillColor="#8b5cf6" android:pathData="M46,24 L46,84 L50,84 L50,24 Z" />
+    <path android:fillColor="#8b5cf6" android:pathData="M58,24 L58,84 L62,84 L58,24 Z" />
+    <path android:fillColor="#8b5cf6" android:pathData="M70,24 L70,84 L74,84 L70,24 Z" />
+    <!-- Frets -->
+    <path android:fillColor="#e5e7eb" android:pathData="M28,34 L80,34 L80,37 L28,37 Z" />
+    <path android:fillColor="#e5e7eb" android:pathData="M28,50 L80,50 L80,53 L28,53 Z" />
+    <path android:fillColor="#e5e7eb" android:pathData="M28,66 L80,66 L80,69 L28,69 Z" />
+    <!-- Finger dot -->
+    <path android:fillColor="#22c55e" android:pathData="M54,40 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
+    <path android:fillColor="#22c55e" android:pathData="M42,56 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
+</vector>

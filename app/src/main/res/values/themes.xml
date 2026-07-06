@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.Fretium" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
