@@ -111,9 +111,6 @@ dependencies {
     // DataStore — Sesión activa
     implementation(libs.androidx.datastore.preferences)
 
-    // Coil — Imágenes (avatares/iconografía futura)
-    implementation(libs.coil.compose)
-
     // ─── Tests unitarios ───────────────────────────────────────────────────
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

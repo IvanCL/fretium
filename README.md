@@ -8,7 +8,7 @@ This is the Android counterpart of the [Fretium web app](https://github.com/) (A
 
 | Feature | Description |
 |---|---|
-| **User accounts** | Register with a username and password — no email, no backend |
+| **Local profiles** | Enter a name to start or resume your progress — no password, no email, no backend |
 | **3 learning levels** | Beginner → Intermediate → Advanced, selectable from the dashboard |
 | **Chord library** | 21 chords with fretboard diagrams drawn on Canvas (no images/SVG), fingering numbers and tips |
 | **Practice mode** | Randomised chord quiz: mark chords as learned, hard or skip |
@@ -42,7 +42,7 @@ All progressions are original practice sequences or traditional public-domain ar
 
 | Screen | Description |
 |---|---|
-| Login / Register | Local auth, no email |
+| Profile | Enter a name to start or resume a local progress profile |
 | Dashboard | Progress overview, level selector, quick access |
 | Chords | Full chord library with Canvas-drawn diagrams |
 | Practice | Randomised chord quiz with on-demand audio |
@@ -51,4 +51,4 @@ All progressions are original practice sequences or traditional public-domain ar
 
 ## Data persistence
 
-Everything is stored on-device: user accounts and chord progress in a Room database (`fretium.db`), and the active session in DataStore. Uninstalling the app deletes all data — there is no cloud sync in this MVP.
+Everything is stored on-device: local profiles and chord progress in a Room database (`fretium.db`), and the active profile in DataStore. Uninstalling the app deletes all data — there is no cloud sync in this MVP.

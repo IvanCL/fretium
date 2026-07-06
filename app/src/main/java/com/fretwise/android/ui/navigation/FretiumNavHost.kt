@@ -21,8 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.fretwise.android.ui.auth.LoginScreen
-import com.fretwise.android.ui.auth.RegisterScreen
+import com.fretwise.android.ui.auth.ProfileScreen
 import com.fretwise.android.ui.auth.SessionState
 import com.fretwise.android.ui.auth.SessionViewModel
 import com.fretwise.android.ui.chords.ChordsScreen
@@ -58,7 +57,7 @@ private fun AuthGatedNavHost(isLoggedIn: Boolean, onLogout: () -> Unit) {
     val navController = rememberNavController()
 
     androidx.compose.runtime.LaunchedEffect(isLoggedIn) {
-        val target = if (isLoggedIn) Screen.Dashboard.route else Screen.Login.route
+        val target = if (isLoggedIn) Screen.Dashboard.route else Screen.Profile.route
         navController.navigate(target) {
             popUpTo(0) { inclusive = true }
             launchSingleTop = true
@@ -82,15 +81,10 @@ private fun AuthGatedNavHost(isLoggedIn: Boolean, onLogout: () -> Unit) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = if (isLoggedIn) Screen.Dashboard.route else Screen.Login.route,
+            startDestination = if (isLoggedIn) Screen.Dashboard.route else Screen.Profile.route,
             modifier = Modifier.padding(padding),
         ) {
-            composable(Screen.Login.route) {
-                LoginScreen(onNavigateToRegister = { navController.navigate(Screen.Register.route) })
-            }
-            composable(Screen.Register.route) {
-                RegisterScreen(onNavigateToLogin = { navController.popBackStack() })
-            }
+            composable(Screen.Profile.route) { ProfileScreen() }
             composable(Screen.Dashboard.route) {
                 DashboardScreen(
                     onLogout = onLogout,
