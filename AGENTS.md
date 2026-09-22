@@ -11,8 +11,8 @@ Fretium Android is a native MVP that teaches electric guitar to Spanish-speaking
 - **UI:** Jetpack Compose + Material 3
 - **DI:** Hilt
 - **Navigation:** Navigation Compose (bottom nav + nested `songs/{songId}` route)
-- **Persistence:** Room (users, progress) + DataStore (active session)
-- **Auth:** Local only, PBKDF2-HMAC-SHA256 password hashing (`javax.crypto`, no external lib)
+- **Persistence:** Room (users, progress) + DataStore (active profile)
+- **Profiles:** No auth — a local profile is just a name (`UserRepository.enterProfile`), created on first use or resumed if it already exists. No password, no server, nothing to protect remotely.
 - **Audio playback:** On-device synthesis via `AudioTrack` (no audio assets)
 - **Pitch detection:** `AudioRecord` + autocorrelation (ported from the web tuner)
 - **Min/target SDK:** 26 / 35
@@ -25,10 +25,9 @@ app/src/main/java/com/fretwise/android/
   data/
     model/            # Chord, Song, Level, AppUser + static ChordsData/SongsData/AudioData
     local/             # Room entities/DAOs, AppDatabase, SessionPreferences (DataStore)
-    UserRepository.kt      # register/login/logout, session flow
+    UserRepository.kt      # enterProfile/logout, active-profile flow
     ProgressRepository.kt  # learned + practice_count upsert logic
     ChordRepository.kt / SongRepository.kt   # thin wrappers over static data
-    PasswordHasher.kt  # PBKDF2 hash/verify
   audio/
     ChordAudioEngine.kt # chord synthesis + AudioTrack playback
     TunerEngine.kt       # AudioRecord capture → Flow<Double> frequency
@@ -37,7 +36,7 @@ app/src/main/java/com/fretwise/android/
     DatabaseModule.kt   # Room providers
   ui/
     navigation/         # Screen routes, bottom nav, FretiumApp/NavHost
-    auth/                # Login/Register screens + ViewModels, SessionViewModel
+    auth/                # ProfileScreen + ProfileViewModel, SessionViewModel
     dashboard/           # Progress overview + level selector
     chords/              # Chord list + components/ChordDiagram.kt (Canvas)
     practice/            # Quiz mode ViewModel + screen
@@ -59,11 +58,11 @@ app/src/main/java/com/fretwise/android/
 ## Database schema (Room)
 
 ```
-users    (id, name UNIQUE COLLATE NOCASE, password_hash, level, created_at)
+users    (id, name UNIQUE COLLATE NOCASE, level, created_at)
 progress (id, user_id FK CASCADE, chord_name, learned, practice_count, UNIQUE(user_id, chord_name))
 ```
 
-There is no `sessions` table — the active session is just a user id persisted in DataStore (`SessionPreferences`), since there's no server-side session/cookie model on-device.
+There is no `sessions` table and no password column — the active profile is just a user id persisted in DataStore (`SessionPreferences`), since there's no server-side session/cookie model on-device and nothing to authenticate.
 
 ## Chord data model
 
@@ -87,7 +86,7 @@ When adding a new chord:
 
 - Do not add a network client, remote API, or cloud sync — this MVP is fully offline by design.
 - Do not add chord diagram images/SVG/PNG assets — keep the Canvas-based renderer.
-- Do not add email, OAuth or third-party auth — username + password only, stored locally.
+- Do not add email, OAuth, passwords or third-party auth — a local profile is just a name, nothing to authenticate.
 - Do not add in-app purchases, notifications or social/multiplayer features.
 - Do not use copyrighted song titles or progressions in `SongsData.kt`.
 - Do not commit `local.properties`, `*.keystore`, or `app/build/` — all covered by `.gitignore`.

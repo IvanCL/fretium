@@ -26,6 +26,7 @@ captures/
 *.jks
 *.keystore
 !debug.keystore
+keystore.properties
 
 # Google services (if added later)
 google-services.json

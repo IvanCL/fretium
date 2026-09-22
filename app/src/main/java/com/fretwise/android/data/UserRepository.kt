@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-sealed interface AuthResult {
-    data class Success(val user: AppUser) : AuthResult
-    data class Error(val message: String) : AuthResult
+sealed interface ProfileResult {
+    data class Success(val user: AppUser) : ProfileResult
+    data class Error(val message: String) : ProfileResult
 }
 
 @Singleton
@@ -24,7 +24,7 @@ class UserRepository @Inject constructor(
     private val sessionPreferences: SessionPreferences,
 ) {
 
-    /** Emits the currently logged-in user, or null when logged out. Backed by DataStore + Room. */
+    /** Emits the currently active local profile, or null when none is selected. Backed by DataStore + Room. */
     val currentUser: Flow<AppUser?> = sessionPreferences.activeUserId
         .distinctUntilChanged()
         .flatMapLatest { userId ->
@@ -32,28 +32,21 @@ class UserRepository @Inject constructor(
             else userDao.observeById(userId).map { it?.toAppUser() }
         }
 
-    suspend fun register(name: String, password: String): AuthResult {
+    /**
+     * Enters a local profile by name — no password, no server. If the name already exists
+     * it resumes that profile's progress; otherwise it creates a new one. Everything stays
+     * on-device, so there's nothing to authenticate against.
+     */
+    suspend fun enterProfile(name: String): ProfileResult {
         val trimmed = name.trim()
-        if (trimmed.isEmpty()) return AuthResult.Error("El nombre no puede estar vacío")
-        if (password.length < 4) return AuthResult.Error("La contraseña debe tener al menos 4 caracteres")
-        if (userDao.findByName(trimmed) != null) {
-            return AuthResult.Error("Ese nombre de usuario ya existe")
-        }
+        if (trimmed.isEmpty()) return ProfileResult.Error("El nombre no puede estar vacío")
 
-        val entity = UserEntity(name = trimmed, passwordHash = PasswordHasher.hash(password))
-        val id = userDao.insert(entity)
-        sessionPreferences.setActiveUser(id)
-        return AuthResult.Success(entity.copy(id = id).toAppUser())
-    }
-
-    suspend fun login(name: String, password: String): AuthResult {
-        val user = userDao.findByName(name.trim())
-            ?: return AuthResult.Error("Usuario o contraseña incorrectos")
-        if (!PasswordHasher.verify(password, user.passwordHash)) {
-            return AuthResult.Error("Usuario o contraseña incorrectos")
+        val existing = userDao.findByName(trimmed)
+        val user = existing ?: userDao.insert(UserEntity(name = trimmed)).let { id ->
+            UserEntity(id = id, name = trimmed)
         }
         sessionPreferences.setActiveUser(user.id)
-        return AuthResult.Success(user.toAppUser())
+        return ProfileResult.Success(user.toAppUser())
     }
 
     suspend fun logout() {

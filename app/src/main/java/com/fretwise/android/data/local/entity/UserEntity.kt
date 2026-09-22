@@ -13,8 +13,6 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,
-    @ColumnInfo(name = "password_hash")
-    val passwordHash: String,
     val level: String = "beginner",
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis() / 1000,

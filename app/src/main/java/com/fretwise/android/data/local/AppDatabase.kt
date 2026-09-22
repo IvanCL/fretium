@@ -9,7 +9,7 @@ import com.fretwise.android.data.local.entity.UserEntity
 
 @Database(
     entities = [UserEntity::class, ProgressEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
