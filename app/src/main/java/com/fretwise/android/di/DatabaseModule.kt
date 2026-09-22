@@ -20,6 +20,9 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME)
+            // Pre-launch app, no production data to preserve yet: recreate the DB on schema changes
+            // instead of hand-writing migrations for every internal iteration.
+            .fallbackToDestructiveMigration()
             .build()
 
     @Provides
